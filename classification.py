@@ -36,7 +36,18 @@ def encode_image(
 
     with torch.no_grad():
         # Pass through Vision Transformer backbone to get projected image features
-        image_features = model.get_image_features(**inputs)
+        outputs = model.get_image_features(**inputs)
+        if hasattr(outputs, "image_embeds") and outputs.image_embeds is not None:
+            image_features = outputs.image_embeds
+        elif hasattr(outputs, "pooler_output") and outputs.pooler_output is not None:
+            image_features = outputs.pooler_output
+        elif isinstance(outputs, torch.Tensor):
+            image_features = outputs
+        elif hasattr(outputs, "last_hidden_state"):
+            image_features = outputs.last_hidden_state
+        else:
+            image_features = outputs[0]
+
         # Normalize to unit vector on the hypersphere
         image_features = image_features / image_features.norm(p=2, dim=-1, keepdim=True)
 
@@ -68,7 +79,18 @@ def encode_text_prompts(
 
     with torch.no_grad():
         # Pass through Text Transformer backbone to get projected text features
-        text_features = model.get_text_features(**inputs)
+        outputs = model.get_text_features(**inputs)
+        if hasattr(outputs, "text_embeds") and outputs.text_embeds is not None:
+            text_features = outputs.text_embeds
+        elif hasattr(outputs, "pooler_output") and outputs.pooler_output is not None:
+            text_features = outputs.pooler_output
+        elif isinstance(outputs, torch.Tensor):
+            text_features = outputs
+        elif hasattr(outputs, "last_hidden_state"):
+            text_features = outputs.last_hidden_state
+        else:
+            text_features = outputs[0]
+
         # Normalize to unit vector on the hypersphere
         text_features = text_features / text_features.norm(p=2, dim=-1, keepdim=True)
 
