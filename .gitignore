@@ -1,0 +1,30 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Large model weights (downloaded automatically or cached via Hugging Face)
+*.safetensors
+*.pt
+*.bin
+*.h5
+*.msgpack
+*.part*
+
+# Testing & cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# System and IDE files
+.agents/
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
